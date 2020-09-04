@@ -1,0 +1,6 @@
+name: StatManager
+main: StatManager\StatManager
+version: B1
+author: Sanea
+api:
+- 3.0.0
