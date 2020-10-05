@@ -162,7 +162,7 @@ class StatManager extends PluginBase
       public function onRun($currentTick) {
         $this->player->addWindow($this->inv);
       }
-    }, 10);
+    }, 20);
   }
   public function onDisable()
   {
