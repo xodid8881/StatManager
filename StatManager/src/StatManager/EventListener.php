@@ -26,6 +26,7 @@ use StatManager\Inventory\DoubleChestInventory;
 use pocketmine\inventory\transaction\action\SlotChangeAction;
 use pocketmine\event\inventory\InventoryCloseEvent;
 use pocketmine\inventory\ContainerInventory;
+use pocketmine\network\mcpe\protocol\ContainerClosePacket;
 
 class EventListener implements Listener
 {
@@ -61,6 +62,26 @@ class EventListener implements Listener
     if ( isset ( $this->plugin->stdb [strtolower ( $name )] )) {
       $this->plugin->stdb [strtolower ( $name )] ["남은체력"] = (int)$player->getHealth ();
       $this->plugin->save ();
+      return true;
+    }
+  }
+  public function onPacketReceive (DataPacketReceiveEvent $event) {
+    $packet = $event->getPacket();
+    if(! $packet instanceof ContainerClosePacket)
+    return;
+    $player = $event->getPlayer();
+    $inv = $player->getWindow ($packet->windowId);
+    if ($inv instanceof DoubleChestInventory) {
+      $pk = new ContainerClosePacket();
+      $pk->windowId = $player->getWindowId($inv);
+      $player->sendDataPacket($pk);
+    }
+  }
+  public function onInvClose(InventoryCloseEvent $event) {
+    $player = $event->getPlayer();
+    $inv = $event->getInventory();
+    if ($inv instanceof DoubleChestInventory) {
+      $inv->onClose($player);
       return true;
     }
   }
