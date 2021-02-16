@@ -84,6 +84,7 @@ class DoubleChestInventory extends InventoryBase{
 		$plugin->getScheduler()->scheduleDelayedTask(new ClosureTask(function(int $unused) use ($who, $x, $y, $z) : void{
 			$pk = new ContainerOpenPacket();
 			$pk->windowId = $who->getWindowId($this);
+			$pk->type = 0;
 			$pk->x = $x;
 			$pk->y = $y;
 			$pk->z = $z;
